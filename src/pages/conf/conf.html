@@ -7,12 +7,50 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>conf</ion-title>
+    <ion-title>Configuración</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+  <div>
+      Código Dispositivo <br>
+      {{id}}
+  </div>
+ 
+   <form [formGroup]="formulario" (ngSubmit)="guardar()" novalidate>
+      <ion-list> 
+     <ion-item>
+       <ion-label>URL</ion-label>
+<ion-input type="url" formControlName="ip"  [(ngModel)]="ip"></ion-input>
+     </ion-item>
+     <ion-item *ngIf="formulario.get('ip').errors && formulario.get('ip').dirty">
+        <p color="danger" ion-text *ngIf="formulario.get('ip').hasError('required')">Este campo es requerido</p>
 
+      </ion-item>
+     
+     
+     <ion-item>
+       <ion-label>Nombre</ion-label>
+      <ion-input type=text  formControlName="nombre" ></ion-input>
+     </ion-item>
+     <ion-item *ngIf="formulario.get('nombre').errors && formulario.get('nombre').dirty">
+        <p color="danger" ion-text *ngIf="formulario.get('nombre').hasError('required')"  >Este campo es requerido</p>
+      </ion-item>
+     <ion-item>
+       <ion-label>Contraseña</ion-label>
+      <ion-input type="password"  formControlName="pass" ></ion-input>
+     </ion-item>
+     <ion-item *ngIf="formulario.get('pass').errors && formulario.get('pass').dirty">
+        <p color="danger" ion-text *ngIf="formulario.get('pass').hasError('required')">Este campo es requerido</p>
+      </ion-item>
+     </ion-list>
+     <div padding>
+        <button ion-button block type="submit" [disabled]="formulario.invalid">Guardar</button>
+      </div>
+   </form>
+   <div padding>
+     <button ion-button (click)=" conexion()"> Probar Conexión</button>
+   </div>
 </ion-content>

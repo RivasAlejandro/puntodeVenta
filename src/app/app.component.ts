@@ -6,10 +6,16 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import {ArticulosPage} from '../pages/articulos/articulos'
-
+import {HeaderComponent} from '../components/header/header';
 import {EditarPage} from '../pages/editar/editar'
-import {RecibosPage} from '../pages/recibos/recibos'
+import {RecibosPage} from '../pages/recibos/recibos'; 
+import {ImprimirPage} from '../pages/imprimir/imprimir';
+import  {DetalleReciboPage}  from '../pages/detalle-recibo/detalle-recibo';
 import { App, AlertController} from 'ionic-angular';
+import { timer } from 'rxjs/observable/timer';
+import { Keyboard } from '@ionic-native/keyboard';
+import { Storage } from '@ionic/storage';
+import {ConfPage} from '../pages/conf/conf'
 @Component({
   templateUrl: 'app.html'
 })
@@ -17,13 +23,23 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
-
+  
 pages: Array<{title: string, component: any}>;
   //pages2: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
+  constructor(  public storage: Storage,public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
   public app: App, public alertCtrl:AlertController) {
-    this.initializeApp();
+    
+    this.storage.get('datos')
+    .then((data)=>{
+ if(data){
+   this.initializeApp();
+ }else{
+   
+   this.nav.setRoot(ConfPage);
+ 
+ }
+    });
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -36,7 +52,7 @@ pages: Array<{title: string, component: any}>;
 
 
   }
-
+  showSplash = true;
   initializeApp() {
     this.platform.ready().then(() => {
 
@@ -47,6 +63,7 @@ pages: Array<{title: string, component: any}>;
 
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      
       this.platform.registerBackButtonAction(() => {
         let nav = this.app.getActiveNavs()[0];
         let activeView = nav.getActive();    
@@ -92,6 +109,10 @@ navegaEditar(){
 
 
 }
+imprimir(){
+  this.nav.setRoot(ArticulosPage);
+  this.nav.push(ImprimirPage);
+}
 navegaLista(){
   this.nav.setRoot(ArticulosPage);
   this.nav.push(ListPage);
@@ -100,7 +121,7 @@ navegaLista(){
 }
 navegaRecibos(){
   this.nav.setRoot(ArticulosPage);
-  this.nav.push(RecibosPage);
+  this.nav.push(DetalleReciboPage);
 
 }
 navegaArticulos(){

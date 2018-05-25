@@ -15,7 +15,25 @@ import { EditarPage } from '../pages/editar/editar';
 import {NavController } from 'ionic-angular';
 import {ArticulosProvider } from '../providers/articulos-servicio/articulos-servicio';
 
+import { CarritoProvider } from '../providers/carrito/carrito';
+import { ListaComponent } from '../components/lista/lista';
+import {DetalleReciboPage} from '../pages/detalle-recibo/detalle-recibo';
+import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
+import { PrintProvider } from '../providers/blue/blue';
+import { ImprimirPage } from '../pages/imprimir/imprimir';
+import {PrinterListModalPage} from '../pages/printer-list-modal/printer-list-modal';
+import { ScanerProvider } from '../providers/scaner/scaner';
+import {HeaderComponent} from '../components/header/header';
+import { GProvider } from '../providers/g/g';
+import {CantidadPage} from '../pages/cantidad/cantidad';
+import { Keyboard } from '@ionic-native/keyboard';
+import { IonicStorageModule } from '@ionic/storage';
+import { UniqueDeviceID } from '@ionic-native/unique-device-id';
+import { HttpModule } from '@angular/http';
+import { Alert} from 'ionic-angular';
+
 @NgModule({
+
   declarations: [
     MyApp,
     HomePage,
@@ -23,10 +41,21 @@ import {ArticulosProvider } from '../providers/articulos-servicio/articulos-serv
     ArticulosPage,
     ConfPage,
     EditarPage,
-    RecibosPage
+    RecibosPage,
+    ListaComponent,
+    DetalleReciboPage,
+    PrinterListModalPage,
+    ImprimirPage,
+    HeaderComponent,
+    CantidadPage
+
+  
   ],
   imports: [
+    HttpModule,
     BrowserModule,
+  
+    IonicStorageModule.forRoot(),
     IonicModule.forRoot(MyApp),
   ],
   bootstrap: [IonicApp],
@@ -35,7 +64,13 @@ import {ArticulosProvider } from '../providers/articulos-servicio/articulos-serv
     HomePage,
     ListPage,
     ArticulosPage,EditarPage,
-    ConfPage,RecibosPage
+    ConfPage,RecibosPage,
+    DetalleReciboPage,
+    ImprimirPage,
+    PrinterListModalPage,
+    HeaderComponent,
+    CantidadPage
+ 
 
   ],
   providers: [
@@ -44,7 +79,14 @@ import {ArticulosProvider } from '../providers/articulos-servicio/articulos-serv
     SplashScreen,
 
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ArticulosProvider
+    ArticulosProvider,
+    BluetoothSerial,
+    
+    CarritoProvider,
+    PrintProvider,
+    ScanerProvider,
+    UniqueDeviceID,
+    GProvider,Keyboard
   ]
 })
 export class AppModule {}

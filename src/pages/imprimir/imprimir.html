@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      Impresora
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  Nombre de impresora 
+  <ion-item>{{selectedPrinter.name}}</ion-item>
+  <ion-item>
+    <button ion-item (tap)="listBTDevice()">
+      Seleccionar Impresora
+    </button>
+  </ion-item>
+<ion-item>
+  <button ion-item (tap)="testConnectPrinter()">
+    Probar Conexión
+  </button>
+</ion-item>
+<ion-item>
+  <button ion-item (tap)="testPrinter()">
+     Imprimir 
+  </button>
+</ion-item>
+
+  
+  
+
+  
+</ion-content>

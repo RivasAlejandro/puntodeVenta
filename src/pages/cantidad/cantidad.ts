@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import {HomePage} from '../home/home'
-import {ArticulosProvider} from '../../providers/articulos-servicio/articulos-servicio'
-import { Platform } from 'ionic-angular';
+
 /**
- * Generated class for the ArticulosPage page.
+ * Generated class for the CantidadPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -12,20 +10,16 @@ import { Platform } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-articulos',
-  templateUrl: 'articulos.html',
+  selector: 'page-cantidad',
+  templateUrl: 'cantidad.html',
 })
-export class ArticulosPage {
+export class CantidadPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-  
-  
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ArticulosPage');
+    console.log('ionViewDidLoad CantidadPage');
   }
- 
 
 }
-
