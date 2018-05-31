@@ -1,22 +1,20 @@
 <div  no-padding>
-<button ion-button (click)="llena()"> Llena</button>
-    <button [disabled]="!activo" ion-button  color="light" (click)="imprime()">
-    <ion-icon name="print"></ion-icon>
-
-  </button>
-
-  <button ion-button color="secondary" (click)="activa()">  
-    Cobrar   {{suma()}} 
-
-  </button>
-
+      
+      <div style="text-align: center;">
+   
+</div>
 
   
 
   <ion-segment [(ngModel)]="pet">
     <ion-segment-button value="todo">
-      <ion-icon name="ios-list"></ion-icon> En Venta
+        <ion-icon name="barcode"></ion-icon> &nbsp; Venta
     </ion-segment-button>
+    <ion-segment-button value="categoria">
+        <ion-icon name="search"></ion-icon> BUSQUEDA
+      </ion-segment-button>
+    
+  
 
   </ion-segment>
 </div>
@@ -29,7 +27,13 @@
     
       
            <div  style="text-align: center;">
-      <input autofocus  type="text"  (keypress)="hacerVenta($event)" [(ngModel)]="texto" #input [hidden]="esconde" >
+
+              <ion-searchbar autofocus  type="number" placeholder="" style="font-size: 20px;"  (keypress)="hacerVenta($event)" [(ngModel)]="texto" #input [hidden]="esconde" >
+                <span>
+                    <ion-icon name="barcode"></ion-icon>
+                </span>
+                  
+              </ion-searchbar>
       </div>
        
      
@@ -44,13 +48,13 @@
       </ion-grid>
       <ion-scroll scrollY="true" style="width:100vw;height:50vh;">
   <ion-list>
-    <p text-center *ngIf="hay">No hay productos en el ticket</p>
+
 <ion-item-group>
   <ion-list>
 <ion-item  no-lines  class="item no-padding" text-nowrap no-padding *ngFor="let t of servicioArticulo.tickets" style="margin-top: 2px;" (click)="modificaPeso(t.codigo,t.unidad,t.nombre,t.cantidad)">
   <ion-row>
       <ion-col col-12  >
- &nbsp; &nbsp; {{trunca(t.nombre)}}   &nbsp; {{t.unidad}}
+ &nbsp; &nbsp; {{t.nombre}}   
       </ion-col>
     </ion-row>
      <ion-row style=" color: dimgray; font-size: 12px;">
@@ -58,7 +62,7 @@
           &nbsp; &nbsp; &nbsp; &nbsp;{{t.codigo}}
      </ion-col>
      <ion-col col-4>
-        {{t.cantidad}}x   ${{t.precio}}
+        {{t.cantidad}}x  &nbsp; {{t.precio}}
      </ion-col>
      <ion-col col-4 text-right style="margin-right: 10px; font-weight: bold; font-size: 14px;">
           ${{servicioArticulo.calcular(t.cantidad,t.precio)}} &nbsp;
@@ -70,9 +74,55 @@
 
     </ion-list>
     </ion-scroll>
+    <br>
+    <ion-grid col-12 >
+      <ion-row style="border: 1px solid blue; ">
        
+      </ion-row>
+    </ion-grid >
+    <ion-grid no-padding>
+      <ion-row>
+        <ion-col col-6 text-left margin-left>
+&nbsp; {{(servicioArticulo.tickets.length)}} productos
+        </ion-col>
+        <ion-col  col-6 text-right  margin-right>
+          
+          Total &nbsp; &nbsp; $ {{suma()}}
+        </ion-col>
+        
+      </ion-row>
+    </ion-grid>
   </ion-list>
-  
+
+  <ion-list *ngSwitchCase="'categoria'">
+      <ion-searchbar  placeholder="Ingresa palabra"   type="text"(keypress)=" buscaP($event)" [ngModel]="texto" (ngModelChange)="texto= $event.toLocaleUpperCase()" ></ion-searchbar>
+      <ion-scroll scrollY="true" style="width:100vw;height:50vh;">
+      <ion-item-group>
+      <ion-list>
+      <ion-item *ngFor="let p2 of productos2"  no-lines  class="item no-padding" text-nowrap no-padding>
+      <ion-row>
+        <ion-col col-12>
+          &nbsp; &nbsp; {{trunca(p2.nombre)}}   &nbsp; {{p2.unidad}}
+        </ion-col>
+      </ion-row >
+      <ion-row style=" color: dimgray; font-size: 12px;">
+          <ion-col col-4>
+              &nbsp; &nbsp; &nbsp; &nbsp;{{p2.codigo}}
+         </ion-col>
+         <ion-col col-4>
+            {{p2.cantidad}}x   ${{p2.precio}}
+         </ion-col>
+         <ion-col col-4 text-right style="margin-right: 10px; font-weight: bold; font-size: 14px;">
+              ${{servicioArticulo.calcular(1,p2.precio)}} &nbsp;
+         </ion-col>
+      </ion-row>
+      </ion-item>
+      
+    </ion-list>
+    </ion-item-group>
+  </ion-scroll>
+  </ion-list>
+    
   
 
 </div>

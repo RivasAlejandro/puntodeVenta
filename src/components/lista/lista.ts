@@ -12,6 +12,8 @@ import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import { AlertController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+import {GProvider} from '../../providers/g/g';
 
 
 
@@ -36,15 +38,17 @@ productos:any=[];
   public venta:any;
   texto:string="";
   esconde=false;
+  productos2=[];
   T="0.0";
+
   prueba=[
   
-    "00041789901980",
- "00001",
- "00172",
-"00287",
-"00308",
-"012388000305"
+   "200000100250",
+   "200004100500",
+   
+  "200000400350",
+  
+  
  
 
   ];
@@ -54,14 +58,32 @@ productos:any=[];
   constructor( public servicioArticulo:ArticulosProvider,
     public loadingCtrl: LoadingController, public nav:NavController,public keyboard:Keyboard , public rendered:Renderer,private el: ElementRef
   ,public alertCtrl: AlertController, public alertCtrl2: AlertController, public alertCtrl3: AlertController,
-  public toastCtrl: ToastController
+  public toastCtrl: ToastController, public storage:Storage ,public  g:GProvider
 
   ) {
      
       
   this.tickets= servicioArticulo.tickets;
 this.venta=servicioArticulo.productos;
-    this.productos=Object.keys(this.servicioArticulo.productos);
+var datos;
+storage.get('datos').then((val) => {
+  this.g.datos= val;
+  });
+setTimeout(() => {
+    if(this.g.datos!=null){
+      console.log(datos);
+  console.log(this.servicioArticulo.productos);
+  
+  this.productos=Object.keys(this.servicioArticulo.productos);
+  this.llena();
+}
+},5000);
+
+
+  
+    
+   
+    
    
  
 
@@ -72,10 +94,37 @@ this.venta=servicioArticulo.productos;
   }
   ionViewLoaded() {
    
-     
     
 
  }
+ buscaP(event:any){
+  var valor= event.target.value;
+  this.productos2=[];
+  var encontrados=[];
+  
+
+  var arregloDeProductos= this.productos.filter( x=>{
+  if(this.servicioArticulo.productos[x][1].includes(valor))
+  return true
+  });
+  for (let index = 0; index < arregloDeProductos.length; index++) {
+    var element = arregloDeProductos[index];
+      var obj={nombre:this.servicioArticulo.productos[element][1],
+    codigo:element,
+    comercial:this.servicioArticulo.productos[element][0],
+    
+    precio:this.servicioArticulo.productos[element][2],
+    unidad:this.servicioArticulo.productos[element][3]
+      }
+      encontrados.push(obj);
+   
+    
+  }
+this.productos2=encontrados;
+console.log(this.productos2.length);
+
+}
+
  kilo(codigo,unidad,nombre,cantidad){
   let alert = this.alertCtrl.create({
     cssClass: 'custom-alert',
@@ -83,51 +132,37 @@ this.venta=servicioArticulo.productos;
   
  
     subTitle:unidad,
+    message:cantidad,
 
-    inputs:[{
-      label:'Peso',
-      name:'peso',
-      id:'peso',
-      type:'number',
-      value:cantidad
-    }
-    
-    ],
+   
     buttons:[{
       text:'Eliminar',
       role:'ok',
       handler:data=>{
         var x:any;
-        for(var i=0; i<this.servicioArticulo.tickets.length;i++){
-      var index = this.servicioArticulo.tickets.indexOf(this.servicioArticulo.tickets[i]);
+        for(var j=0; j<this.servicioArticulo.tickets.length;j++){
+          if(codigo==this.servicioArticulo.tickets[j].codigo){
+            
+      var index = this.servicioArticulo.tickets.indexOf(this.servicioArticulo.tickets[j]);
+      
       if(index>-1){
         x= this.servicioArticulo.tickets.splice(index, 1);
       
      this.tickets=Object.assign({},x);
       
-     }
-      }
-      }
-    },{
-    text:'OK',
-    role:'ok',
-    handler:data=>{
-      if(data.peso>0){
-        for(var i=0; i<this.servicioArticulo.tickets.length;i++){
-          if(codigo==this.servicioArticulo.tickets[i].codigo){
-          this.servicioArticulo.tickets[i].cantidad=data.peso;}
-          }
-      }else{
-        let toast = this.toastCtrl.create({
-         
-          message: 'Cantidad no valida!',
-          duration: 2000,
-          position:'middle'
-        });
-        toast.present();
-      }
+    } 
+    //existe ?
+         }// codigos iguales ?
+        } //for
+           } // handler
 
-    }
+      
+    },{
+      text:'Cancelar',
+      role:'ok',
+      handler:data=>{
+
+      }
     }]
   });
 
@@ -159,13 +194,14 @@ message:' <br> Introduzca  cantidad',
     handler:data=>{
       var x:any;
       for(var i=0; i<this.servicioArticulo.tickets.length;i++){
+        if(codigo==this.servicioArticulo.tickets[i].codigo){
       var index = this.servicioArticulo.tickets.indexOf(this.servicioArticulo.tickets[i]);
       if(index>-1){
         x= this.servicioArticulo.tickets.splice(index, 1);
+  this.tickets=Object.assign({},x);
       
-     this.tickets=Object.assign({},x);
-       if(x.length==0){ this.hay=true;}
      }
+    }
       }
     }
       
@@ -203,16 +239,18 @@ if(data.peso>=1 ){
  }
  modificaPeso(codigo,unidad,nombre,cantidad){
 
-   let kilo=false; 
+   
    let caja= false;
-   let pieza= false;
-   if(unidad=="KILOGRAMO"){kilo=true;}
-  if(kilo){ this.kilo(codigo,unidad,nombre,cantidad);
-  }
- else {pieza=true;}
-  if(pieza){
+   let  kg= false;
+   let pieza=true;
+    if(pieza){
+    if(unidad!="KILOGRAMO"){
     this.pieza(codigo,unidad,nombre,cantidad);
-  }
+    
+       }else{
+        this.kilo(codigo,unidad,nombre,cantidad);
+       }
+             }
   
 
  }
@@ -243,21 +281,26 @@ for(let index = 0; index < this.prueba.length; index++) {
        }
   hacerVenta(event:any){
     
-    this.keyboard.close();
+    //this.keyboard.close();
 var valor= event.target.value;
-   
 
-   
-    {if(event.keyCode==13){
 
-      this.texto='';   
-     
-      
-
-    }
-    this.servicioArticulo.add(valor);
+if(this.texto.length>1){
+ 
+  {if(event.keyCode==13){
+    this.servicioArticulo.add(this.texto);
+    this.texto='';  
+  }
+  
+ 
+}
+}
     
-  }    this.hay=false;
+    
+      
+      
+      
+  
       
       }
   

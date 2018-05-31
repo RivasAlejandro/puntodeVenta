@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
 
+import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 /*
   Generated class for the GProvider provider.
 
@@ -10,8 +10,18 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class GProvider {
 public total;
-  constructor(public http: HttpClient) {
-    console.log('Hello GProvider Provider');
+datos:any;
+  constructor(public storage:Storage) {
+    storage.get('datos').then((val) => {
+    this.datos= val;
+    });
+    setTimeout(() => {
+      console.log(this.datos);
+    },2000);
+   // 
+
+  
+    
   }
 
 }

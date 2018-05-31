@@ -22,15 +22,16 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import { PrintProvider } from '../providers/blue/blue';
 import { ImprimirPage } from '../pages/imprimir/imprimir';
 import {PrinterListModalPage} from '../pages/printer-list-modal/printer-list-modal';
-import { ScanerProvider } from '../providers/scaner/scaner';
+
 import {HeaderComponent} from '../components/header/header';
 import { GProvider } from '../providers/g/g';
 import {CantidadPage} from '../pages/cantidad/cantidad';
 import { Keyboard } from '@ionic-native/keyboard';
 import { IonicStorageModule } from '@ionic/storage';
 import { UniqueDeviceID } from '@ionic-native/unique-device-id';
-import { HttpModule } from '@angular/http';
+
 import { Alert} from 'ionic-angular';
+import { HttpModule } from '@angular/http'; 
 
 @NgModule({
 
@@ -84,7 +85,7 @@ import { Alert} from 'ionic-angular';
     
     CarritoProvider,
     PrintProvider,
-    ScanerProvider,
+    
     UniqueDeviceID,
     GProvider,Keyboard
   ]
